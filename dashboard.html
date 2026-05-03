@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+
+    <a class="navbar-brand fw-bold" href="#">📚 StudyHub</a>
+
+    <form class="d-flex mx-auto" style="width: 40%;" onsubmit="return false;">
+      <input class="form-control" type="search" placeholder="Search users..." id="userSearch">
+    </form>
+
+    <div class="d-flex align-items-center gap-3">
+      <a href="upload.html" class="btn btn-light">Upload</a>
+
+      <div class="dropdown">
+        <button class="btn btn-light d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+          <div id="avatar" class="bg-dark text-white rounded-circle d-flex justify-content-center align-items-center" 
+          style="width:35px;height:35px;"></div>
+          <span id="username"></span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#" onclick="showProfile()">Profile</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" onclick="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<div class="container mt-4">
+    <input id="noteSearch" class="form-control mb-3" placeholder="Search notes by subject/title">
+    <div id="list"></div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="modal fade" id="noteModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Notes</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="noteContent"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal fade" id="profileModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">User Profile</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body text-center">
+        <div id="profileAvatar" class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3" 
+        style="width:70px;height:70px;font-size:24px;"></div>
+
+        <h5 id="profileName"></h5>
+        <p class="text-muted" id="profileEmail"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// AUTH CHECK
+let user = localStorage.getItem("user");
+let name = localStorage.getItem("name");
+
+if(!user){
+    window.location = "login.html";
+}
+
+let displayName = (name && name !== "undefined") ? name : user.split("@")[0];
+
+document.getElementById("username").innerText = displayName;
+document.getElementById("avatar").innerText = displayName.charAt(0).toUpperCase();
+
+let allData = [];
+
+// LOAD
+function load(){
+    fetch("http://localhost:3000/resources")
+    .then(res=>res.json())
+    .then(data=>{
+        allData = data;
+        display(data);
+    });
+}
+
+// DISPLAY (FIXED DELETE)
+function display(data){
+    let output="";
+    let currentUser = localStorage.getItem("user");
+    let role = localStorage.getItem("role");
+
+    data.forEach((r)=>{
+
+        let actionBtn = "";
+
+        if(r.type === "link"){
+            actionBtn = `<a href="${r.content}" target="_blank" class="btn btn-primary">Open Link</a>`;
+        }
+        else if(r.type === "note"){
+            actionBtn = `<button class="btn btn-info" onclick="viewNote(\`${r.content}\`)">View Notes</button>`;
+        }
+        else if(r.type === "pdf"){
+            actionBtn = `<a href="http://localhost:3000/uploads/${r.content}" target="_blank" class="btn btn-success">Download PDF</a>`;
+        }
+
+        let deleteBtn = "";
+
+        // ✅ FIXED HERE (USE _id)
+        if(role === "admin" || r.user === currentUser){
+            deleteBtn = `<button class="btn btn-danger ms-2" onclick="del('${r._id}')">Delete</button>`;
+        }
+
+        output += `
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <h5>${r.title}</h5>
+                <p class="text-muted">${r.subject}</p>
+                <p class="text-secondary small">👤 ${r.user}</p>
+
+                ${actionBtn}
+                ${deleteBtn}
+            </div>
+        </div>`;
+    });
+
+    document.getElementById("list").innerHTML = output;
+}
+
+// DELETE (FIXED)
+function del(id){
+    let user = localStorage.getItem("user");
+    let role = localStorage.getItem("role");
+
+    fetch(`http://localhost:3000/delete/${id}?user=${user}&role=${role}`,{
+        method:"DELETE"
+    })
+    .then(res=>res.text())
+    .then(msg=>{
+        if(msg==="Deleted"){
+            load();
+        } else {
+            alert("❌ Not allowed");
+        }
+    });
+}
+
+// PROFILE
+function showProfile(){
+    document.getElementById("profileName").innerText = displayName;
+    document.getElementById("profileEmail").innerText = user;
+    document.getElementById("profileAvatar").innerText = displayName.charAt(0).toUpperCase();
+
+    new bootstrap.Modal(document.getElementById('profileModal')).show();
+}
+
+// VIEW NOTE
+function viewNote(note){
+    document.getElementById("noteContent").innerText = note;
+    new bootstrap.Modal(document.getElementById('noteModal')).show();
+}
+
+// SEARCH
+document.getElementById("noteSearch").addEventListener("keyup", function(){
+    let key = this.value.toLowerCase();
+
+    if(key === "") return display(allData);
+
+    let filtered = allData.filter(r => 
+        r.title.toLowerCase().includes(key) ||
+        r.subject.toLowerCase().includes(key)
+    );
+
+    display(filtered);
+});
+
+// LOGOUT
+function logout(){
+    localStorage.clear();
+    window.location="login.html";
+}
+
+// INIT
+load();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

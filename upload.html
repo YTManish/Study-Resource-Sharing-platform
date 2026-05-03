@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-dark text-white">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="dashboard.html">📚 StudyHub</a>
+
+    <div class="ms-auto">
+      <a href="dashboard.html" class="btn btn-light">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<!-- UPLOAD FORM -->
+<div class="container mt-5">
+    <h2 class="mb-4">Upload Resource</h2>
+
+    <input id="title" class="form-control mb-3" placeholder="Title">
+    <input id="subject" class="form-control mb-3" placeholder="Subject">
+
+    <select id="type" class="form-select mb-3" onchange="changeType()">
+        <option value="link">Link</option>
+        <option value="note">Notes</option>
+        <option value="pdf">PDF</option>
+    </select>
+
+    <input id="linkInput" class="form-control mb-3" placeholder="Paste URL">
+
+    <textarea id="noteInput" class="form-control mb-3 d-none" rows="4" placeholder="Write your notes..."></textarea>
+
+    <input type="file" id="pdfInput" class="form-control mb-3 d-none">
+
+    <button class="btn btn-success" onclick="upload()">Upload</button>
+</div>
+
+<script>
+function changeType(){
+    let type = document.getElementById("type").value;
+
+    linkInput.classList.add("d-none");
+    noteInput.classList.add("d-none");
+    pdfInput.classList.add("d-none");
+
+    if(type === "link") linkInput.classList.remove("d-none");
+    if(type === "note") noteInput.classList.remove("d-none");
+    if(type === "pdf") pdfInput.classList.remove("d-none");
+}
+
+function upload(){
+
+    let selectedType = document.getElementById("type").value;
+    let user = localStorage.getItem("user");
+
+    if(!user){
+        alert("Please login first");
+        window.location = "login.html";
+        return;
+    }
+
+    // ===== PDF =====
+    if(selectedType === "pdf"){
+
+        // ✅ CHECK FILE
+        if(!pdfInput.files[0]){
+            alert("⚠️ Please select a PDF file");
+            return;
+        }
+
+        let formData = new FormData();
+
+        formData.append("title", title.value);
+        formData.append("subject", subject.value);
+        formData.append("file", pdfInput.files[0]);
+        formData.append("user", user);
+
+       fetch("http://localhost:3000/upload/pdf", {
+    method: "POST",
+    body: formData
+})
+.then(res => {
+    console.log("STATUS:", res.status); // 🔥 debug
+    return res.text();
+})
+.then(msg => {
+    console.log("SERVER RESPONSE:", msg); // 🔥 debug
+
+    if (msg.includes("uploaded")) {
+        alert("✅ PDF Uploaded");
+        window.location = "dashboard.html"; // ✅ guaranteed redirect
+    } else {
+        alert("❌ Upload failed: " + msg);
+    }
+})
+.catch(err => {
+    console.error("UPLOAD ERROR:", err);
+    alert("❌ Network/Server error");
+});
+    } else {
+
+        // ===== LINK / NOTE =====
+        let data = {
+            title: title.value,
+            subject: subject.value,
+            type: selectedType,
+            content: selectedType === "link" ? linkInput.value : noteInput.value,
+            user: user
+        };
+
+        fetch("http://localhost:3000/upload",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify(data)
+        })
+        .then(res=>{
+            if(!res.ok) throw new Error("Upload failed");
+            return res.text();
+        })
+        .then(()=>{
+            alert("✅ Uploaded");
+            window.location="dashboard.html";
+        })
+        .catch(err=>{
+            console.error(err);
+            alert("❌ Upload failed");
+        });
+    }
+}
+
+</script>
+
+</body>
+</html>

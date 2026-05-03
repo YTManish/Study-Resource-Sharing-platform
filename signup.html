@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Signup</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-dark d-flex justify-content-center align-items-center vh-100">
+
+<div class="card p-4 shadow-lg" style="width: 400px; border-radius:15px;">
+    
+    <h3 class="mb-3">Create Account</h3>
+
+    <input id="name" class="form-control mb-3" placeholder="Student Name">
+    <input id="email" class="form-control mb-3" placeholder="Email">
+    <input id="password" type="password" class="form-control mb-3" placeholder="Password">
+
+    <button class="btn btn-success w-100 mb-2" onclick="signup()">Signup</button>
+
+    <p class="text-center mt-2">
+        Already have account? <a href="login.html">Login</a>
+    </p>
+
+</div>
+
+<script>
+function signup(){
+    fetch("http://localhost:3000/signup",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            name: name.value,   // 🔥 added
+            email: email.value,
+            password: password.value
+        })
+    })
+    .then(res=>res.text())
+    .then(msg=>{
+        alert("✅ Signup successful");
+        window.location="login.html"; // 🔥 redirect after signup
+    });
+}
+</script>
+
+</body>
+</html>
