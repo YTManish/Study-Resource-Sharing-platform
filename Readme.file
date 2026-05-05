@@ -1,0 +1,143 @@
+# 📚 Study Resource Sharing Platform
+
+## 🚀 Overview
+
+The **Study Resource Sharing Platform (StudyHub)** is a full-stack web application where students can upload, share, and access study materials such as notes, PDFs, and useful links.
+
+It is built using **HTML, Bootstrap, JavaScript, Node.js, Express, and MongoDB**.
+
+---
+
+## ✨ Features
+
+* 🔐 User Authentication (Signup & Login)
+* 📤 Upload study resources:
+
+  * 📄 PDF files
+  * 🔗 Links
+  * 📝 Notes
+* 📚 View all uploaded resources
+* 🔍 Search by subject/title
+* 🗑️ Delete resources (Admin / Owner only)
+* 👤 User profile dropdown
+* 📁 File upload using Multer
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* HTML
+* CSS (Bootstrap)
+* JavaScript
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* MongoDB (Local)
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/study-resource-sharing-platform.git
+cd study-resource-sharing-platform
+```
+
+---
+
+### 2️⃣ Install dependencies
+
+```bash
+cd backend
+npm install
+```
+
+---
+
+### 3️⃣ Setup MongoDB (Local)
+
+Make sure MongoDB is installed and running.
+
+Connection used:
+
+```bash
+mongodb://127.0.0.1:27017/studyhub
+```
+
+---
+
+### 4️⃣ Run the server
+
+```bash
+node server.js
+```
+
+Server runs at:
+
+```
+http://localhost:3000
+```
+
+---
+
+### 5️⃣ Open frontend
+
+Open in browser:
+
+* `login.html`
+* `signup.html`
+* `dashboard.html`
+* `upload.html`
+
+---
+
+## 📂 Project Structure
+
+```
+Study-Resource-Sharing-Platform/
+│
+├── backend/
+│   ├── server.js
+│   ├── uploads/
+│
+├── login.html
+├── signup.html
+├── dashboard.html
+├── upload.html
+├── package.json
+└── .gitignore
+```
+
+---
+
+## 🔑 Default Admin Login
+
+```
+Email: admin@gmail.com
+Password: admin123
+```
+
+---
+
+## 🚀 Future Improvements
+
+* 🌐 Deploy full project online
+* 🔐 JWT authentication
+* ❤️ Like & save resources
+* 💬 Comments feature
+* 🔎 Advanced search
+
+---
+
+## 👨‍💻 Author
+
+**Manish AT**
