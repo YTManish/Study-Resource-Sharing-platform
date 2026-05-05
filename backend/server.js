@@ -1,4 +1,4 @@
-require("dotenv").config(); // optional (can keep or remove)
+require("dotenv").config(); 
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -8,7 +8,7 @@ const fs = require("fs");
 
 const app = express();
 
-/* MIDDLEWARE */
+
 
 app.use(cors());
 app.use(express.json());
