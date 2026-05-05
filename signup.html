@@ -24,12 +24,14 @@
 </div>
 
 <script>
+    
 function signup(){
     fetch("http://localhost:3000/signup",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify({
-            name: name.value,   // 🔥 added
+            name: name.value,  
+
             email: email.value,
             password: password.value
         })
@@ -37,9 +39,10 @@ function signup(){
     .then(res=>res.text())
     .then(msg=>{
         alert("✅ Signup successful");
-        window.location="login.html"; // 🔥 redirect after signup
+        window.location="login.html";
     });
 }
+
 </script>
 
 </body>

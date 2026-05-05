@@ -24,7 +24,9 @@
 </div>
 
 <script>
+
 function login(){
+
     fetch("http://localhost:3000/login",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -33,6 +35,7 @@ function login(){
             password: password.value
         })
     })
+
     .then(res=>res.json())
     .then(data=>{
         if(data.status==="success"){
@@ -47,7 +50,9 @@ function login(){
             alert("❌ Invalid login");
         }
     });
+
 }
+
 </script>
 
 </body>

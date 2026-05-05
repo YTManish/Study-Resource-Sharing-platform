@@ -8,16 +8,19 @@ const fs = require("fs");
 
 const app = express();
 
-/* ========= MIDDLEWARE ========= */
+/* MIDDLEWARE */
+
 app.use(cors());
 app.use(express.json());
 
-/* ========= CONNECT MONGODB (FIXED) ========= */
-mongoose.connect("mongodb://127.0.0.1:27017/studyhub")
-.then(() => console.log("✅ MongoDB Connected (Local)"))
-.catch(err => console.log("❌ DB Error:", err));
+/* CONNECT MONGODB */
 
-/* ========= SCHEMAS ========= */
+mongoose.connect("mongodb://127.0.0.1:27017/studyhub")
+.then(() => console.log(" MongoDB Connected (Local)"))
+.catch(err => console.log(" DB Error:", err));
+
+
+
 const userSchema = new mongoose.Schema({
     name: String,
     email: String,
@@ -36,14 +39,16 @@ const resourceSchema = new mongoose.Schema({
 const User = mongoose.model("User", userSchema);
 const Resource = mongoose.model("Resource", resourceSchema);
 
-/* ========= UPLOAD FOLDER ========= */
+/* UPLOAD FOLDER */
+
 if (!fs.existsSync("uploads")) {
     fs.mkdirSync("uploads");
 }
 
 app.use("/uploads", express.static("uploads"));
 
-/* ========= MULTER ========= */
+/* MULTER */
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, "uploads/"),
     filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
@@ -51,7 +56,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/* ========= LOGIN ========= */
+/* LOGIN */
+
 app.post("/login", async (req, res) => {
 
     const user = await User.findOne({
@@ -71,7 +77,8 @@ app.post("/login", async (req, res) => {
     }
 });
 
-/* ========= SIGNUP ========= */
+/* SIGNUP */
+
 app.post("/signup", async (req, res) => {
 
     const exists = await User.findOne({ email: req.body.email });
@@ -90,7 +97,8 @@ app.post("/signup", async (req, res) => {
     res.send("Signup successful");
 });
 
-/* ========= PDF UPLOAD ========= */
+/* PDF UPLOAD */
+
 app.post("/upload/pdf", upload.single("file"), async (req, res) => {
 
     try {
@@ -116,21 +124,24 @@ app.post("/upload/pdf", upload.single("file"), async (req, res) => {
     }
 });
 
-/* ========= LINK / NOTE ========= */
+
+
 app.post("/upload", async (req, res) => {
 
     await Resource.create(req.body);
     res.send("Uploaded");
 });
 
-/* ========= GET ========= */
+
+
 app.get("/resources", async (req, res) => {
 
     const data = await Resource.find();
     res.json(data);
 });
 
-/* ========= DELETE ========= */
+/*  DELETE */
+
 app.delete("/delete/:id", async (req, res) => {
 
     const { user, role } = req.query;
@@ -148,7 +159,8 @@ app.delete("/delete/:id", async (req, res) => {
     res.send("Deleted");
 });
 
-/* ========= ADMIN USER ========= */
+/* ADMIN USER */
+
 (async () => {
     const admin = await User.findOne({ email: "admin@gmail.com" });
 
@@ -159,11 +171,12 @@ app.delete("/delete/:id", async (req, res) => {
             password: "admin123",
             role: "admin"
         });
-        console.log("✅ Admin created");
+        console.log(" Admin created");
     }
 })();
 
-/* ========= SERVER ========= */
+/* SERVER */
+
 app.listen(3000, () => {
-    console.log("🚀 Server running on http://localhost:3000");
+    console.log(" Server running on http://localhost:3000");
 });

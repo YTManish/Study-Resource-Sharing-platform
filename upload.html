@@ -8,6 +8,7 @@
 <body class="bg-dark text-white">
 
 <!-- NAVBAR -->
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
   <div class="container">
     <a class="navbar-brand fw-bold" href="dashboard.html">📚 StudyHub</a>
@@ -19,6 +20,7 @@
 </nav>
 
 <!-- UPLOAD FORM -->
+
 <div class="container mt-5">
     <h2 class="mb-4">Upload Resource</h2>
 
@@ -41,7 +43,9 @@
 </div>
 
 <script>
+
 function changeType(){
+
     let type = document.getElementById("type").value;
 
     linkInput.classList.add("d-none");
@@ -64,10 +68,10 @@ function upload(){
         return;
     }
 
-    // ===== PDF =====
+
     if(selectedType === "pdf"){
 
-        // ✅ CHECK FILE
+    
         if(!pdfInput.files[0]){
             alert("⚠️ Please select a PDF file");
             return;
@@ -84,16 +88,18 @@ function upload(){
     method: "POST",
     body: formData
 })
+
 .then(res => {
-    console.log("STATUS:", res.status); // 🔥 debug
+    console.log("STATUS:", res.status);
     return res.text();
 })
+
 .then(msg => {
-    console.log("SERVER RESPONSE:", msg); // 🔥 debug
+    console.log("SERVER RESPONSE:", msg); 
 
     if (msg.includes("uploaded")) {
         alert("✅ PDF Uploaded");
-        window.location = "dashboard.html"; // ✅ guaranteed redirect
+        window.location = "dashboard.html"; 
     } else {
         alert("❌ Upload failed: " + msg);
     }
@@ -104,7 +110,7 @@ function upload(){
 });
     } else {
 
-        // ===== LINK / NOTE =====
+        
         let data = {
             title: title.value,
             subject: subject.value,

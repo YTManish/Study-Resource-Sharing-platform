@@ -8,6 +8,7 @@
 <body class="bg-light">
 
 <!-- NAVBAR -->
+ 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
   <div class="container">
 
@@ -43,7 +44,7 @@
     <div id="list"></div>
 </div>
 
-<!-- NOTE MODAL -->
+
 <div class="modal fade" id="noteModal">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -56,8 +57,10 @@
   </div>
 </div>
 
-<!-- PROFILE MODAL -->
+
+
 <div class="modal fade" id="profileModal">
+
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -78,7 +81,8 @@
 
 <script>
 
-// AUTH CHECK
+// AUTHENTICation Check
+
 let user = localStorage.getItem("user");
 let name = localStorage.getItem("name");
 
@@ -89,11 +93,13 @@ if(!user){
 let displayName = (name && name !== "undefined") ? name : user.split("@")[0];
 
 document.getElementById("username").innerText = displayName;
+
 document.getElementById("avatar").innerText = displayName.charAt(0).toUpperCase();
 
 let allData = [];
 
 // LOAD
+
 function load(){
     fetch("http://localhost:3000/resources")
     .then(res=>res.json())
@@ -103,7 +109,8 @@ function load(){
     });
 }
 
-// DISPLAY (FIXED DELETE)
+// DISPLAY 
+
 function display(data){
     let output="";
     let currentUser = localStorage.getItem("user");
@@ -125,8 +132,11 @@ function display(data){
 
         let deleteBtn = "";
 
-        // ✅ FIXED HERE (USE _id)
+    
+
+
         if(role === "admin" || r.user === currentUser){
+
             deleteBtn = `<button class="btn btn-danger ms-2" onclick="del('${r._id}')">Delete</button>`;
         }
 
@@ -146,7 +156,8 @@ function display(data){
     document.getElementById("list").innerHTML = output;
 }
 
-// DELETE (FIXED)
+// DELETE
+
 function del(id){
     let user = localStorage.getItem("user");
     let role = localStorage.getItem("role");
@@ -174,12 +185,14 @@ function showProfile(){
 }
 
 // VIEW NOTE
+
 function viewNote(note){
     document.getElementById("noteContent").innerText = note;
     new bootstrap.Modal(document.getElementById('noteModal')).show();
 }
 
-// SEARCH
+// SEARCH BAR
+
 document.getElementById("noteSearch").addEventListener("keyup", function(){
     let key = this.value.toLowerCase();
 
