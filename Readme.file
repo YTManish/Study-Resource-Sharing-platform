@@ -1,113 +1,73 @@
-# 📚 Study Resource Sharing Platform
+StudyHub is a web application where students can upload and share study materials like notes, PDFs, and links.
 
-## 🚀 Overview
+Built using:
 
-The **Study Resource Sharing Platform (StudyHub)** is a full-stack web application where students can upload, share, and access study materials such as notes, PDFs, and useful links.
+HTML
+Bootstrap
+JavaScript
+Node.js
+Express.js
+MongoDB
 
-It is built using **HTML, Bootstrap, JavaScript, Node.js, Express, and MongoDB**.
 
----
+## Features
+User Signup & Login
+Upload PDFs, Notes, and Links
+View shared resources
+Search resources
+Delete resources
+Admin access
+File upload support
 
-## ✨ Features
 
-* 🔐 User Authentication (Signup & Login)
-* 📤 Upload study resources:
+## Technologies Used
 
-  * 📄 PDF files
-  * 🔗 Links
-  * 📝 Notes
-* 📚 View all uploaded resources
-* 🔍 Search by subject/title
-* 🗑️ Delete resources (Admin / Owner only)
-* 👤 User profile dropdown
-* 📁 File upload using Multer
+#Frontend
+HTML
+Bootstrap
+JavaScript
 
----
+#Backend
+Node.js
+Express.js
+Database
+MongoDB
 
-## 🛠️ Tech Stack
-
-### Frontend
-
-* HTML
-* CSS (Bootstrap)
-* JavaScript
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* MongoDB (Local)
-
----
-
-## ⚙️ Installation & Setup
-
-### 1️⃣ Clone the repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/study-resource-sharing-platform.git
-cd study-resource-sharing-platform
-```
-
----
-
-### 2️⃣ Install dependencies
-
-```bash
-cd backend
+## Install Packages
 npm install
-```
 
----
-
-### 3️⃣ Setup MongoDB (Local)
-
-Make sure MongoDB is installed and running.
-
-Connection used:
-
-```bash
+## Start MongoDB
 mongodb://127.0.0.1:27017/studyhub
-```
 
----
-
-### 4️⃣ Run the server
-
-```bash
+## Run Server
 node server.js
-```
 
-Server runs at:
 
-```
-http://localhost:3000
-```
+## Admin Login
+Email: admin@gmail.com
+Password: admin123
 
----
+# Paste this in the MongoDB in users and Add data, copy this below id for admin control
 
-### 5️⃣ Open frontend
+{
+  "_id": {
+    "$oid": "69f747291c39c6f08114cc20"
+  },
+  "name": "Admin",
+  "email": "admin@gmail.com",
+  "password": "admin123",
+  "role": "admin",
+  "__v": 0
+}
 
-Open in browser:
 
-* `login.html`
-* `signup.html`
-* `dashboard.html`
-* `upload.html`
+## Project Files
 
----
-
-## 📂 Project Structure
-
-```
-Study-Resource-Sharing-Platform/
+StudyHub/
 │
 ├── backend/
 │   ├── server.js
-│   ├── uploads/
+│   └── uploads/
 │
 ├── login.html
 ├── signup.html
@@ -115,29 +75,3 @@ Study-Resource-Sharing-Platform/
 ├── upload.html
 ├── package.json
 └── .gitignore
-```
-
----
-
-## 🔑 Default Admin Login
-
-```
-Email: admin@gmail.com
-Password: admin123
-```
-
----
-
-## 🚀 Future Improvements
-
-* 🌐 Deploy full project online
-* 🔐 JWT authentication
-* ❤️ Like & save resources
-* 💬 Comments feature
-* 🔎 Advanced search
-
----
-
-## 👨‍💻 Author
-
-**Manish AT**
